@@ -1,0 +1,50 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="search-box">
+        <h5 style="font-weight: bold;">Filter</h5><br>
+        <label for="fromDate">From Date:</label>
+        <input type="date" id="fromDate" name="startDate">
+        <label for="fromDate">To Date:</label>
+        <input type="date" id="toDate" name="endDate"><br>
+        <button type="submit" class="btn btn-primary" style="background-color: #dc3545;">Search</button>
+    </div>
+</form>
+    <div class="table-container">
+        <table class="table table-bordered" id="despatchTable">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Despatch number</th>
+                <th>Driver name</th>
+                <th>Vehicle</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for x in data1 %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{x.date|date:"d/m/y"}}</td>
+                    <td>{{x.despatch_id}}</td>
+                    <td>{{x.driver.driver_name}}</td>
+                    <td>{{x.vehicle.vehicle_name}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning"><ion-icon name="create-outline"></ion-icon></button>
+                        <button class="btn btn-sm btn-danger"><a href=/delete_despatch/{{x.despatch_id}}><ion-icon name="trash-outline"></ion-icon></a></button>
+                    </td>
+                </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

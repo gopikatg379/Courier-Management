@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Designation, User, Consignor, Consignee, District, Driver, Vehicle
 from django.contrib import messages
-from Staffapp.models import Booking
+from Staffapp.models import Booking,Despatch
 
 
 # Create your views here.
@@ -475,5 +475,16 @@ def delete_booking(request, booking_id):
         booking_obj.delete()
         messages.success(request, 'Booking deleted successfully!')
         return redirect('/list_booking')
+    else:
+        return redirect('/')
+def list_despatch(request):
+    if 'user_id' in request.session:
+        user_obj = User.objects.get(user_id=request.session['user_id'])
+        despatch_obj = Despatch.objects.all()
+        if request.method == 'POST':
+            search = request.POST.get('search')
+            if search:
+                despatch_obj = despatch_obj.filter(despatch_number__icontains=search)
+        return render(request, 'list_despatch.html', {'data1': despatch_obj, 'data': user_obj})
     else:
         return redirect('/')

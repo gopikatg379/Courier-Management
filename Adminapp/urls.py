@@ -35,4 +35,5 @@ urlpatterns = [
     path('edit_vehicle/<int:vehicle_id>/',views.edit_vehicle),
     path('list_booking',views.list_booking),
     path('delete_booking/<int:booking_id>/',views.delete_booking),
+    path('list_despatch',views.list_despatch),
 ]
