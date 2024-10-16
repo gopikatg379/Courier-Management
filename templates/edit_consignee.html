@@ -1,0 +1,34 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+{% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+<form method="POST" name="consignee">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="consignor_name">Consignee Name:</label>
+            <input type="text" class="form-control" id="consignor_name" name="consignee_name" value="{{data1.consignee_name}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="address">Consignee address:</label>
+            <input type="text" class="form-control" id="address" name="consignee_address" value="{{data1.consignee_address}}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="phone_number">Phone Number:</label>
+            <input type="tel" class="form-control" id="phone_number" name="consignee_phone" value="{{data1.consignee_phone}}">
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="status" value="{{data1.consignee_status}}" name="consignee_status" checked>
+        <label class="form-check-label" for="status" >Active Consignor</label>
+    </div>
+    <button type="submit" class="btn btn-primary" style="background-color: #dc3545;">Save</button>
+</form>
+{% endblock %}

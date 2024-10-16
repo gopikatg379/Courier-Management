@@ -1,0 +1,36 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST" name="consignor">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="driver_name">Diver Name:</label>
+            <input type="text" class="form-control" id="driver_name" name="driver_name">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="driver_address">Address:</label>
+            <input type="text" class="form-control" id="driver_address" name="driver_address">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="driver_phone">Phone Number:</label>
+            <input type="tel" class="form-control" id="driver_phone" name="driver_phone">
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="status" name="driver_status" checked>
+        <label class="form-check-label" for="status" >Active</label>
+    </div>
+    <button type="submit" class="btn btn-primary" style="background-color: #dc3545;">Save</button>
+
+</form>
+{% endblock %}
+

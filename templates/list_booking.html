@@ -1,0 +1,56 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="search-box">
+        <h4 style="font-weight: bold;">Search</h4>
+        <label for="consignorName">Consignor name:</label>
+        <input type="text" id="consignorName" name="search">
+        <button type="submit" class="btn btn-primary" style="background-color: #dc3545;">Search</button>
+    </div>
+</form>
+<div class="table-container">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Consignor</th>
+            <th>Consignee</th>
+            <th>Destination</th>
+            <th>Weight</th>
+            <th>No.of Boxes</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for x in data1 %}
+            <tr>
+                <td>{{x.date_booked|date:"d/m/y"}}</td>
+                <td>{{x.consignor.consignor_name}}</td>
+                <td>{{x.consignee.consignee_name}}</td>
+                <td>{{x.district.district_name}}</td>
+                <td>{{x.weight}}kg</td>
+                <td>{{x.number_of_boxes}}</td>
+                <td>{{x.price}}</td>
+                <td>{{x.status}}</td>
+                <td>
+                    <button class="btn btn-sm btn-warning"><a href=/staff/edit_booking/{{x.booking_id}}><ion-icon name="create-outline"></ion-icon></a></button>
+                    {% if data.designation.designation == 'Admin'%}
+                        <button class="btn btn-sm btn-danger"><a href=/delete_booking/{{x.booking_id}}><ion-icon name="trash-outline"></ion-icon></a></button>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

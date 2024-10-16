@@ -1,0 +1,30 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST" name="consignor">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="vehicle_name">Vehicle Model:</label>
+            <input type="text" class="form-control" id="vehicle_name" name="vehicle_name" value="{{data1.vehicle_name}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="vehicle_number">Vehicle Number:</label>
+            <input type="text" class="form-control" id="vehicle_number" name="vehicle_number" value="{{data1.vehicle_number}}">
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="status" name="vehicle_status" checked value="{{data1.vehicle_status}}">
+        <label class="form-check-label" for="status" >Active</label>
+    </div>
+    <button type="submit" class="btn btn-primary" style="background-color: #dc3545;">Save</button>
+
+</form>
+{% endblock %}
+

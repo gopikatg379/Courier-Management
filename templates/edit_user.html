@@ -1,0 +1,42 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="user_name">User name</label>
+            <input type="text" class="form-control" id="user_name" name="username" value="{{data.username}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="designation">Designation</label><br>
+            <select id="designation" name="designation" required style="width:610px;height:38px;background-color:white" >
+                {% for x in data1 %}
+                <option value="{{x.designation_id}}" >{{x.designation}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" value="{{data.password}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="phone_number">Phone Number</label>
+            <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{data.phone_number}}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{data.email}}">
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="status" value="{{data.user_status}}" name="user_status" checked>
+        <label class="form-check-label" for="status">Active User</label>
+    </div>
+    <button type="submit" class="btn btn-primary" style="background-color: #d9534f;">Save</button>
+</form>
+{% endblock %}

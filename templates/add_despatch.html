@@ -1,0 +1,70 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="date">Date:</label>
+            <input type="date" class="form-control" id="date" name="date">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="driver_name">Driver:</label>
+            <select id="driver_name" name="driver" required style="width:410px;height:38px;background-color:white">
+                {% for x in data2 %}
+                <option value="{{x.driver_id}}">{{x.driver_name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="vehicle_name">Vehicle:</label>
+            <select id="vehicle_name" name="vehicle" required style="width:410px;height:38px;background-color:white;">
+                {% for x in data3 %}
+                <option value="{{x.vehicle_id}}">{{x.vehicle_number}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th><input type="checkbox"></th>
+                <th>Booking Date</th>
+                <th>Booking No.</th>
+                <th>Consignor</th>
+                <th>Consignee</th>
+                <th>Destination</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for x in data1 %}
+            <tr>
+                {% if data4.booking.booking_id != x.booking_id%}
+                    <td>{{forloop.counter}}</td>
+                    <td><input type="checkbox" name="booking" id="booking_id" value="{{x.booking_id}}"></td>
+                    <td>{{x.date_booked|date:"d/m/y"}}</td>
+                    <td>{{x.booking_id}}</td>
+                    <td>{{x.consignor.consignor_name}}</td>
+                    <td>{{x.consignee.consignee_name}}</td>
+                    <td>{{x.district.district_name}}</td>
+                    <td>{{x.number_of_boxes}}</td>
+                    <td>{{x.price}}</td>
+                    <td>{{x.status}}</td>
+                {% endif %}
+            </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-secondary" style="background-color: #dc3545;">Save</button>
+</form>
+{% endblock %}

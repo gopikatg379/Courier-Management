@@ -1,0 +1,27 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST" name="consignor">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="district_name">District:</label>
+            <input type="text" class="form-control" id="district_name" name="district_name">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="state">State:</label>
+            <input type="text" class="form-control" id="state" name="state">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background-color: #dc3545;">Save</button>
+
+</form>
+{% endblock %}
+

@@ -1,0 +1,90 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {% if messages%}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor%}
+    {% endif%}
+    <div class="form-row">
+        <div>
+            <label for="date">Date</label>
+            <input type="date" class="form-control" id="date" name="date" style="width: 200px;" value="{{data1.date_booked}}">
+        </div>
+        <div>
+            <label for="consignor_name" style="margin-left: 50px;">Consignor Name</label>
+            <select id="consignor_name" style="margin-left: 50px;" class="form-control" name="consignor" onchange="updateConsignorDetails()">
+                <option value="">Select Consignor</option>
+                {% for x in data2%}
+                    <option value="{{ x.consignor_id }}" data-address="{{ x.consignor_address }}" data-phone="{{ x.consignor_phone }}">
+                        {{ x.consignor_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="consignor_address" style="margin-left: 80px;">Consignor Address</label>
+            <input type="text" class="form-control" id="consignor_address" style="width: 400px; margin-left: 80px;" readonly value="{{data1.consignor.consignor_address}}">
+        </div>
+        <div>
+            <label for="consignor_phone" style="margin-left: 40px;">Consignor Phone Number</label>
+            <input type="text" class="form-control" id="consignor_phone" name="phone_number" style="margin-left: 40px;" readonly value="{{data1.consignor.consignor_phone}}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div>
+            <label for="consignee_name" style="margin-top:10px">Consignee Name</label>
+            <select id="consignee_name" class="form-control"  name="consignee" onchange="updateConsigneeDetails()">
+                <option value="">Select Consignee</option>
+                {% for x in data3%}
+                    <option value="{{ x.consignee_id }}" data-address="{{ x.consignee_address }}" data-phone="{{ x.consignee_phone }}">
+                        {{ x.consignee_name }}
+                    </option>
+                {%endfor%}
+            </select>
+        </div>
+        <div>
+            <label for="consignee_phone" style="margin-left: 50px; margin-top:10px">Consignee Phone Number</label>
+            <input type="text" name="phone_number" class="form-control" id="consignee_phone" style="width: 200px; margin-left: 50px;" readonly value="{{data1.consignee.consignee_phone}}">
+        </div>
+        <div>
+            <label for="consignee_address" style="margin-left: 50px; margin-top:10px">Consignee Address</label>
+            <input type="text" name="consignee_address" class="form-control" id="consignee_address" style="width: 400px;  margin-left: 50px;" readonly value="{{data1.consignee.consignee_address}}">
+        </div>
+        <div>
+            <label for="district_name" style="margin-left: 40px; margin-top:10px">Destination</label>
+            <select id="district_name" style="margin-left: 40px;" class="form-control" name="district" required>
+                <option value="">Select District</option>
+                {% for x in data4 %}
+                    <option value="{{ x.district_id}}">
+                        {{ x.district_name}}
+                    </option>
+                {% endfor %}
+            </select>
+            <a href="/add_district" style="margin-left:40px;">add destination?</a>
+        </div>
+    </div>
+    <div class="form-row">
+        <div>
+            <label for="noOfBoxes" style="margin-top:10px">No. of Boxes</label>
+            <input type="number" class="form-control" id="noOfBoxes" style="width: 100px; " name="number" value="{{data1.number_of_boxes}}" >
+        </div>
+        <div>
+            <label for="weight" style="margin-left: 30px;  margin-top:10px">Weight(Kg)</label>
+            <input type="text" class="form-control" id="weight" style="width: 100px; margin-left: 30px;" name="weight" value="{{data1.weight}}">
+        </div>
+        <div>
+            <label for="price" style="margin-left: 30px;margin-top:10px">Price</label>
+            <input type="text" class="form-control" id="price" style="width: 100px; margin-left: 30px;" name="price" readonly value="{{data1.price}}">
+        </div>
+        <div>
+            <label for="remarks" style="margin-left: 50px;margin-top:10px">Remarks</label>
+            <input type="text" class="form-control" id="remarks" style="width: 400px; margin-left: 50px;" name="remark" value="{{data1.remark}}">
+        </div>
+    </div><br>
+    <button type="submit" class="btn btn-secondary" style="background-color: #dc3545;">Save</button>
+</form>
+{% endblock %}

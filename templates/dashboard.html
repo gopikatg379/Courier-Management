@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceejay Courier</title>
+    {% load static %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            margin:0;
+        }
+        .dropbtn {
+            background-color: #b34c4c;
+            color: white;
+            padding: 6px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            height:45px;
+            width:100px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {background-color: #d32f2f;}
+        .dropdown:hover .dropdown-content {display: block;}
+        .dropdown:hover .dropbtn {background-color: #d32f2f;}
+        .sidebar {
+            height: 100vh;
+            background-color: #6c757d;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            font-size: 16px;
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+        }
+        .sidebar a:hover {
+            background-color: #575d63;
+            text-decoration: none;
+        }
+        .sidebar .nav-section {
+            font-weight: bold;
+            padding-left: 20px;
+            padding-top: 10px;
+        }
+        .content {
+            padding: 20px;
+            margin:0;
+            overflow-y: auto;
+        }
+        .main-content {
+            padding: 20px;
+            margin:0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #d32f2f;
+            padding: 10px 20px;
+            height:85px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .title {
+            color: white;
+            font-size: 28px;
+            font-weight:bold;
+        }
+
+        .signout-btn {
+            background-color: #f5f5f5;
+            color: #d9534f;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        .signout-btn:hover {
+            background-color: #d32f2f;
+        }
+        .search-box {
+            padding: 40px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+        .search-box input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+
+        }
+        .search-box button {
+            float: right;
+        }
+        .table-container {
+            margin:0;
+            padding-top: 20px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .arrow {
+            transition: transform 0.3s;
+        }
+        .arrow.rotate {
+            transform: rotate(180deg);
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #6c757d;
+
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 header" >
+                <div class="title">CEEJAY COURIER</div>
+                <div class="dropdown" style="margin-left:1020px;">
+                    <button class="dropbtn" style="color:white;border-radius:8px;">Quick Links</button>
+                    <div class="dropdown-content" style="left:0;">
+                        <a href="/add_consignor">Add Consignor</a>
+                        <a href="/add_consignee">Add Consignee</a>
+                        <a href="staff/add_booking">Add Booking</a>
+                    </div>
+                </div>
+                <div class="dropdown" >
+                <button class="dropbtn" style="color:white;border-radius:8px;">{{data.designation.designation}}</button>
+                <div class="dropdown-content" style="left:0;">
+                    <a href="/signout">Sign Out</a>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 sidebar">
+                <h6 style="font-style: italic;">Main Navigation</h6><br>
+                <h5><a href="/dashboard"><ion-icon name="cube-outline"></ion-icon> Dashboard</a></h5>
+                <h5><a data-toggle="collapse" href="#masterMenu" role="button" aria-expanded="false" aria-controls="masterMenu" ><ion-icon name="chevron-up-outline" class="arrow" id="consignorArrow"></ion-icon>
+                    Master <span class="arrow"></span>
+                </a></h5>
+                <div class="collapse" id="masterMenu">
+                    <a data-toggle="collapse" href="#consignor" role="button" aria-expanded="false" aria-controls="consignor" href="#" class="pl-3"><ion-icon name="ellipse-outline" class="arrow" id="consignorArrow" style="width: 14px;"></ion-icon> Consignor<span class="caret"></span></a>
+                        <div class="collapse" id="consignor">
+                            {%if data.designation.designation == 'Admin' %}
+                            <a style="font-size: 12px;" href="/add_consignor" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Consignor</a>
+                            {%endif%}
+                            <a style="font-size: 12px;" href="/list_consignor" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Consignor</a>
+                        </div>
+                    <a data-toggle="collapse" href="#consignee" role="button" aria-expanded="false" aria-controls="consignee" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="ellipse-outline" class="arrow" id="consigneeArrow" style="width: 15px;"></ion-icon> Consignee<span class="caret"></span></a>
+                        <div class="collapse" id="consignee">
+                            {%if data.designation.designation == 'Admin' %}
+                            <a style="font-size: 12px;" href="/add_consignee" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Consignee</a>
+                            {%endif%}
+                            <a style="font-size: 12px;" href="/list_consignee" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Consignee</a>
+                        </div>
+                    {%if data.designation.designation == 'Admin' %}
+                    <a data-toggle="collapse" href="#user" role="button" aria-expanded="false" aria-controls="user" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="people-outline" class="arrow" id="userArrow" style="width: 15px;"></ion-icon> User<span class="caret"></span></a>
+                        <div class="collapse" id="user">
+                            <a style="font-size: 12px;" href="/add_user" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add User</a>
+                            <a style="font-size: 12px;" href="/list_user" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List User</a>
+                        </div>
+                    {%endif%}
+                    <a data-toggle="collapse" href="#district" role="button" aria-expanded="false" aria-controls="district" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="location-outline" class="arrow" id="districtArrow" style="width: 15px;"></ion-icon> District<span class="caret"></span></a>
+                        <div class="collapse" id="district">
+                            <a style="font-size: 12px;" href="/add_district" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add District</a>
+                            <a style="font-size: 12px;" href="/list_district" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List District</a>
+                        </div>
+                    <a data-toggle="collapse" href="#vehicle" role="button" aria-expanded="false" aria-controls="vehicle" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="car-outline" class="arrow" id="vehicleArrow" style="width: 15px;"></ion-icon> Vehicle<span class="caret"></span></a>
+                        <div class="collapse" id="vehicle">
+                            <a style="font-size: 12px;" href="/add_vehicle" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Vehicle</a>
+                            <a style="font-size: 12px;" href="/list_vehicle" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Vehicle</a>
+                        </div>
+                    <a data-toggle="collapse" href="#driver" role="button" aria-expanded="false" aria-controls="driver" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="speedometer-outline" class="arrow" id="driverArrow" style="width: 15px;"></ion-icon> Driver<span class="caret"></span></a>
+                        <div class="collapse" id="driver">
+                            <a style="font-size: 12px;" href="/add_driver" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Driver</a>
+                            <a style="font-size: 12px;" href="/list_driver" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Driver</a>
+                        </div>
+                    {% if data.designation.designation == 'Admin' %}
+                    <a data-toggle="collapse" href="#designation" role="button" aria-expanded="false" aria-controls="driver" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="finger-print-outline" id="designationArrow" style="width: 15px;"></ion-icon> Designation<span class="caret"></span></a>
+                        <div class="collapse" id="designation">
+                            <a style="font-size: 12px;" href="/add_designation" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Designation</a>
+                            <a style="font-size: 12px;" href="/list_designation" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Designation</a>
+                        </div>
+                    {%endif %}
+                </div>
+                <h5><a data-toggle="collapse" href="#operationMenu" role="button" aria-expanded="false" aria-controls="operationMenu"><ion-icon name="chevron-up-outline" class="arrow" id="consignorArrow"></ion-icon>
+                        Operation <span class="caret"></span>
+                    </a>
+                </h5>
+                <div class="collapse" id="operationMenu" >
+                    <a data-toggle="collapse" href="#booking" role="button" aria-expanded="false" aria-controls="booking" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="book-outline" class="arrow" id="bookingArrow" style="width: 15px;"></ion-icon> Booking<span class="caret"></span></a>
+                        <div class="collapse" id="booking">
+                            <a style="font-size: 12px;" href="staff/add_booking" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Booking</a>
+                            <a style="font-size: 12px;" href="/list_booking" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Booking</a>
+                        </div>
+                    <a data-toggle="collapse" href="#despatch" role="button" aria-expanded="false" aria-controls="despatch" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="rocket-outline" class="arrow" id="despatchArrow" style="width: 15px;"></ion-icon> Despatch<span class="caret"></span></a>
+                        <div class="collapse" id="despatch">
+                            <a style="font-size: 12px;" href="staff/add_despatch" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Despatch</a>
+                            <a style="font-size: 12px;" href="/list_despatch" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Despatch</a>
+                        </div>
+                    <a data-toggle="collapse" href="#delivery" role="button" aria-expanded="false" aria-controls="delivery" href="#" class="pl-3" href="#" class="pl-3"><ion-icon name="home-outline" class="arrow" id="deliveryArrow" style="width: 15px;"></ion-icon> Delivery<span class="caret"></span></a>
+                        <div class="collapse" id="delivery">
+                            <a style="font-size: 12px;" href="staff/add_delivery" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  Add Delivery</a>
+                            <a style="font-size: 12px;" href="staff/list_delivery" class="pl-3"><ion-icon name="arrow-forward-outline"></ion-icon>  List Delivery</a>
+                        </div>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 col-lg-10 content">
+                {% block content %}
+                {% endblock %}
+            </main>
+            {% if messages %}
+                alert('{{ message }}')
+            {% endif %}
+        </div>
+    </div>
+    <footer>
+        <p>Copyright © 2024. All rights reserved.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var today = new Date();
+
+            var formattedDate = today.toISOString().substr(0, 10);
+            document.getElementById('date').value = formattedDate;
+        });
+        function updateConsignorDetails() {
+            var selector = document.getElementById('consignor_name');
+            var selectedOption = selector.options[selector.selectedIndex];
+            var address = selectedOption.getAttribute('data-address');
+            var phone = selectedOption.getAttribute('data-phone');
+
+            document.getElementById('consignor_address').value = address || '';
+            document.getElementById('consignor_phone').value = phone || '';
+        }
+        function updateConsigneeDetails() {
+            var selector = document.getElementById('consignee_name');
+            var selectedOption = selector.options[selector.selectedIndex];
+            var address = selectedOption.getAttribute('data-address');
+            var phone = selectedOption.getAttribute('data-phone');
+
+            document.getElementById('consignee_address').value = address || '';
+            document.getElementById('consignee_phone').value = phone || '';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const consignorSelect = document.getElementById('consignor_name');
+            const consignorAddress = document.getElementById('consignor_address');
+            const consignorPhone = document.getElementById('consignor_phone');
+            const weightInput = document.getElementById('weight');
+            const priceInput = document.getElementById('price');
+
+            const pricePerKg = 10;
+
+            consignorSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const address = selectedOption.getAttribute('data-address');
+                const phone = selectedOption.getAttribute('data-phone');
+                consignorAddress.value = address || '';
+                consignorPhone.value = phone || '';
+            });
+
+            weightInput.addEventListener('input', function() {
+                const weight = parseFloat(this.value) || 0;
+                const price = weight * pricePerKg;
+                priceInput.value = price;
+            });
+
+        });
+        function toggleCheckboxes(source) {
+            checkboxes = document.getElementsByName('row_checkbox');
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+    $(document).ready(function() {
+        $('#despatchTable,#bookingTable,#deliveryTable,#receiptTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "pageLength": 7,
+        });
+    });
+
+    </script>
+</body>
+</html>

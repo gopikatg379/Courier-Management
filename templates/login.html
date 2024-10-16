@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceejay Courier - Login</title>
+    {% load static %}
+     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .login-container {
+        background: url("/static/truck.avif") no-repeat center center;
+        background-size: cover;
+        height: 100vh;
+    }
+
+    .login-box {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px 0px #000;
+        border: solid 1px;
+    }
+
+    .login-box h1, .login-box h2 {
+        color: #333;
+    }
+
+    .input-group-text {
+        background: #ffffff;
+        border: none;
+    }
+
+    .input-group-text i {
+        color: #333;
+    }
+
+    .form-control {
+        border-left: none;
+    }
+
+    .btn-danger {
+        background-color: #e3342f;
+        border: none;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid login-container">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-4">
+                <div class="login-box p-4">
+                    <h2 class="text-center mb-4" style="font-weight: bold;">LOGIN</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="staff_name">Username</label>
+                            <div class="input-group" style="border: solid 1px;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><ion-icon name="person-circle-outline"></ion-icon></span>
+                                </div>
+                                <input type="text" class="form-control" id="staff_name" name="username" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group" style="border: solid 1px;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                                </div>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger btn-block">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        {% if messages %}
+            {% for message in messages %}
+                alert('{{ message }}');
+            {% endfor %}
+        {% endif %}
+    </script>
+</body>
+</html>
