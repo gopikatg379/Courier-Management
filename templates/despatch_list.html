@@ -1,0 +1,41 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+</form>
+    <div class="table-container">
+
+
+        <div id="printableTable">
+            <h5>Driver:{{data2.driver.driver_name}}</h5>
+        <h5>Date:{{data2.date}}</h5>
+        <table class="table table-bordered" id="despatchTable">
+            <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>LR.No</th>
+                        <th>Consignor</th>
+                        <th>Consignee</th>
+                        <th>Weight</th>
+                        <th>No.of Box</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+            <tbody>
+            {% for booking in data1 %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{booking.booking_id}}</td>
+                    <td>{{booking.consignor_name}}</td>
+                    <td>{{booking.consignee_name}}</td>
+                    <td>{{booking.weight}}</td>
+                    <td>{{booking.number_of_boxes}}</td>
+                    <td>{{booking.price}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+            </div>
+        <button class="btn btn-primary" style="background-color: #dc3545;float:right;margin-top:50px;" onclick="printTable()">Print&nbsp;<ion-icon name="print-outline"></ion-icon></button>
+    </div>
+{% endblock %}

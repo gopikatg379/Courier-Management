@@ -35,7 +35,7 @@
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{x.date|date:"d/m/y"}}</td>
-                    <td>{{x.despatch_id}}</td>
+                    <td><a href="/despatch_list/{{x.despatch_id}}"> {{x.despatch_id}}</a></td>
                     <td>{{x.driver.driver_name}}</td>
                     <td>{{x.vehicle.vehicle_name}}</td>
                     <td>

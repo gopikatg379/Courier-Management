@@ -108,3 +108,4 @@ def add_despatch(request):
         des_obj = Despatch.objects.all()
         return render(request, 'add_despatch.html',
                       {'data': user_obj, 'data1': booking_obj, 'data2': driver_obj, 'data3': vehicle_obj,'data4': des_obj})
+

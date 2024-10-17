@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Designation, User, Consignor, Consignee, District, Driver, Vehicle
 from django.contrib import messages
-from Staffapp.models import Booking,Despatch
+from Staffapp.models import Booking, Despatch
 
 
 # Create your views here.
@@ -477,6 +477,8 @@ def delete_booking(request, booking_id):
         return redirect('/list_booking')
     else:
         return redirect('/')
+
+
 def list_despatch(request):
     if 'user_id' in request.session:
         user_obj = User.objects.get(user_id=request.session['user_id'])
@@ -486,5 +488,41 @@ def list_despatch(request):
             if search:
                 despatch_obj = despatch_obj.filter(despatch_number__icontains=search)
         return render(request, 'list_despatch.html', {'data1': despatch_obj, 'data': user_obj})
+    else:
+        return redirect('/')
+
+
+def despatch_list(request, despatch_id):
+    if 'user_id' in request.session:
+        user_obj = User.objects.get(user_id=request.session['user_id'])
+        try:
+            # Fetch the despatch object and related bookings
+            despatch_obj = Despatch.objects.prefetch_related('booking__consignor', 'booking__consignee').get(despatch_id=despatch_id)
+            print(despatch_obj)
+        except Despatch.DoesNotExist:
+            despatch_obj = None
+        bookings = despatch_obj.booking.all()
+        print(bookings)
+
+        booking_data = []
+        if despatch_obj:
+            # Access the related bookings through the ManyToManyField
+            bookings = despatch_obj.booking.all()
+
+            for booking in bookings:
+                booking_data.append({
+                    'booking_id': booking.booking_id,
+                    'consignor_name': booking.consignor.consignor_name,
+                    'consignee_name': booking.consignee.consignee_name,
+                    'weight': booking.weight,
+                    'price': booking.price,
+                    'number_of_boxes':booking.number_of_boxes
+                })
+        print(booking_data)
+        if request.method == 'POST':
+            search = request.POST.get('search')
+            if search:
+                despatch_obj = despatch_obj.filter(booking_id__icontains=search)
+        return render(request, 'despatch_list.html', {'data1': booking_data, 'data': user_obj,'data2':despatch_obj})
     else:
         return redirect('/')
