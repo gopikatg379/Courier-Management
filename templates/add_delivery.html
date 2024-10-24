@@ -1,0 +1,81 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="date">Date:</label>
+            <input type="date" class="form-control" id="date" name="date">
+        </div>
+<!--        <form method = "POST">-->
+<!--            {% csrf_token%}-->
+        <div class="form-group col-md-4">
+            <label for="booking_id">Booking No.:</label>
+            <input type="text" class="form-control" id="bookings_id" name="booking_id">
+        </div>
+            <div class="form-row">
+        <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-save" style="background-color:#d9534f; margin-top:30px;">Check</button>
+        </div>
+        </div>
+<!--            </form>-->
+        <div class="table-container" style="margin-bottom: 20px;">
+        <table class="table table-bordered table-striped table-hover" style="margin-top:20px;margin-right:120px;">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th><input type="checkbox"></th>
+                <th>Date</th>
+                <th>Booking number</th>
+                <th>Consignor</th>
+                <th>Consignee</th>
+                <th>Weight</th>
+                <th>Number of boxes</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for x in data1%}
+                <tr>
+<!--                    {% if x.booking_id != data2.booking.booking_id %}-->
+                    <td>{{forloop.counter}}</td>
+                    <td><input type="checkbox" name="booking_id" id="booking_id" value="{{x.booking_id}}"></td>
+                    <td>{{x.date_booked|date:"d/m/y"}}</td>
+                    <td>{{x.booking_id}}</td>
+                    <td>{{x.consignor.consignor_name}}</td>
+                    <td>{{x.consignee.consignee_name}}</td>
+                    <td>{{x.weight}}</td>
+                    <td>{{x.number_of_boxes}}</td>
+                    <td>{{x.price}}</td>
+                    {%endif%}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="delivered" name="del_status">
+                <label class="form-check-label" for="delivered">
+                    Delivered
+                </label>
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="returned" name="ret_status">
+                <label class="form-check-label" for="returned">
+                    Returned
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-save" style="background-color:#d9534f; padding: 10px 20px;">Save</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

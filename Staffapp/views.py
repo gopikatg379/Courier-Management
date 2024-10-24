@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from Adminapp.models import User, Consignor, Consignee, District, Driver, Vehicle
-from Staffapp.models import Booking, Despatch
+from Staffapp.models import Booking, Despatch, Delivery
 from django.contrib import messages
 
 
@@ -107,5 +107,36 @@ def add_despatch(request):
         vehicle_obj = Vehicle.objects.all()
         des_obj = Despatch.objects.all()
         return render(request, 'add_despatch.html',
-                      {'data': user_obj, 'data1': booking_obj, 'data2': driver_obj, 'data3': vehicle_obj,'data4': des_obj})
+                      {'data': user_obj, 'data1': booking_obj, 'data2': driver_obj, 'data3': vehicle_obj,
+                       'data4': des_obj})
 
+
+def add_delivery(request):
+    if 'user_id' in request.session:
+        user_obj = User.objects.get(user_id=request.session['user_id'])
+        booking_obj = Booking.objects.all()
+        print(booking_obj)
+        if request.method == 'POST':
+            search = request.POST.get('booking_id')
+            if search:
+                booking_obj = booking_obj.filter(booking_id__icontains=search)
+                print(booking_obj)
+                delivery_obj = Delivery()
+                delivery_obj.date = request.POST.get('date')
+                delivery_obj.booking = Booking.objects.get(booking_id=request.POST.get('booking_id'))
+                dels_status = request.POST.get('del_status')
+                ret_status = request.POST.get('ret_status')
+                if dels_status:
+                    delivery_obj.status = 'delivered'
+                elif ret_status:
+                    delivery_obj.status = 'returned'
+                delivery_obj.save()
+                messages.success(request, 'Delivery added successfully!')
+        delivered_or_returned_ids = Delivery.objects.filter(status__in=['delivered', 'returned']).values_list(
+            'booking_id', flat=True)
+        booking_obj = Booking.objects.exclude(booking_id__in=delivered_or_returned_ids)
+        delivery_obj = Delivery.objects.all()
+        print(delivery_obj)
+        return render(request, 'add_delivery.html', {'data': user_obj, 'data1': booking_obj, 'data2': delivery_obj})
+    else:
+        return redirect('/')

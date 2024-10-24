@@ -497,7 +497,8 @@ def despatch_list(request, despatch_id):
         user_obj = User.objects.get(user_id=request.session['user_id'])
         try:
             # Fetch the despatch object and related bookings
-            despatch_obj = Despatch.objects.prefetch_related('booking__consignor', 'booking__consignee').get(despatch_id=despatch_id)
+            despatch_obj = Despatch.objects.prefetch_related('booking__consignor', 'booking__consignee').get(
+                despatch_id=despatch_id)
             print(despatch_obj)
         except Despatch.DoesNotExist:
             despatch_obj = None
@@ -516,13 +517,24 @@ def despatch_list(request, despatch_id):
                     'consignee_name': booking.consignee.consignee_name,
                     'weight': booking.weight,
                     'price': booking.price,
-                    'number_of_boxes':booking.number_of_boxes
+                    'number_of_boxes': booking.number_of_boxes
                 })
         print(booking_data)
         if request.method == 'POST':
             search = request.POST.get('search')
             if search:
                 despatch_obj = despatch_obj.filter(booking_id__icontains=search)
-        return render(request, 'despatch_list.html', {'data1': booking_data, 'data': user_obj,'data2':despatch_obj})
+        return render(request, 'despatch_list.html', {'data1': booking_data, 'data': user_obj, 'data2': despatch_obj})
     else:
         return redirect('/')
+
+
+def delete_despatch(request, despatch_id):
+    if 'user_id' in request.session:
+        despatch_obj = Despatch.objects.get(despatch_id=despatch_id)
+        despatch_obj.delete()
+        messages.success(request, 'Despatch deleted successfully!')
+        return redirect('/list_despatch')
+    else:
+        return redirect('/')
+
