@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Designation, User, Consignor, Consignee, District, Driver, Vehicle
 from django.contrib import messages
-from Staffapp.models import Booking, Despatch
-
+from Staffapp.models import Booking, Despatch,Delivery
+from django.db.models import Q
 
 # Create your views here.
 
@@ -538,3 +538,11 @@ def delete_despatch(request, despatch_id):
     else:
         return redirect('/')
 
+
+def list_delivery(request):
+    if 'user_id' in request.session:
+        user_obj = User.objects.get(user_id=request.session['user_id'])
+        del_obj = Delivery.objects.filter(Q(status__icontains='Delivered') | Q(status__icontains='Returned'))
+        return render(request, 'list_delivery.html', {'data1': del_obj,'data':user_obj})
+    else:
+        return redirect('/')

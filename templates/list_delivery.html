@@ -24,10 +24,12 @@
             <tr>
                 <th>#</th>
                 <th>Date</th>
-                <th>Despatch number</th>
-                <th>Driver name</th>
-                <th>Vehicle</th>
+                <th>Consignor Name</th>
+                <th>Consignee name</th>
+                <th>Status</th>
+                {% if data.designation.designation == 'Admin' %}
                 <th>Action</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -35,14 +37,15 @@
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{x.date|date:"d/m/y"}}</td>
-                    <td><a href="/despatch_list/{{x.despatch_id}}"> {{x.despatch_id}}</a></td>
-                    <td>{{x.driver.driver_name}}</td>
-                    <td>{{x.vehicle.vehicle_name}}</td>
-
+                    <td>{{x.booking.consignor.consignor_name}}</td>
+                    <td>{{x.booking.consignee.consignee_name}}</td>
+                    <td>{{x.status}}</td>
+                    {% if data.designation.designation == 'Admin' %}
                     <td>
                         <button class="btn btn-sm btn-warning"><ion-icon name="create-outline"></ion-icon></button>
-                        <button class="btn btn-sm btn-danger"><a href=/delete_despatch/{{x.despatch_id}}><ion-icon name="trash-outline"></ion-icon></a></button>
+                        <button class="btn btn-sm btn-danger"><a href=/delete_delivery/{{x.delivery_id}}><ion-icon name="trash-outline"></ion-icon></a></button>
                     </td>
+                    {% endif %}
                 </tr>
             {%endfor%}
             </tbody>
