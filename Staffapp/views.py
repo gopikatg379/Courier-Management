@@ -37,6 +37,7 @@ def add_booking(request):
             booking_obj.remark = request.POST.get('remark')
             booking_obj.save()
             barcode_filename = generate_barcode(str(booking_obj.booking_id))
+            print(f'Barcode filename assigned: {barcode_filename}')
             booking_obj.barcode_image = barcode_filename
             booking_obj.save(update_fields=['barcode_image'])
             messages.success(request, 'Booking added successfully!')

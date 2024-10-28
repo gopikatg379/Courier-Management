@@ -1,59 +1,38 @@
 {% extends 'dashboard.html' %}
 {% block content %}
-<div class="container container-box1" id="printableContent" style="border:2px solid black;">
-    <!-- Header with Logo and Barcode -->
-
-
-    <!-- Form Content in a Table Layout -->
-    <table class="table mt-3" >
-        <div class="row">
-        <div class="col-8">
-            <span class="header1" style="padding-top:50px;padding-left:10px;">CEEJAY COURIER</span>
+<div class="courier-receipt" id="printableContent">
+    <h1 class="company-name">CEEJAY COURIER</h1>
+    <div class="barcode-section">
+        <img src="{{ data1.barcode_image.url }}" alt="Barcode" class="barcode-image">
+    </div>
+    <div class="details-section">
+        <div class="detail-row">
+            <div><strong>Date:</strong> {{ data1.date_booked|date:"d/m/y" }}</div>
+            <div><strong>No. of Boxes:</strong> {{ data1.number_of_boxes }}</div>
+            <div><strong>LR No.:</strong> {{ data1.booking_id }}</div>
         </div>
-        <div class="col-4 text-end">
-            <span style="font-size: 24px;"></span> <!-- Placeholder for Barcode -->
+        <div class="detail-row">
+            <div><strong>Consignor:</strong> {{ data1.consignor.consignor_name }}</div>
+            <div><strong>Consignee:</strong> {{ data1.consignee.consignee_name }}</div>
         </div>
+        <div class="detail-row">
+            <div><strong>Address:</strong> {{ data1.consignee.consignee_address }}</div>
         </div>
-        <br>
-        <tr>
-            <td class="label">DATE:</td>
-            <td colspan="2">{{data1.date_booked|date:"d/m/y"}}</td>
-            <td class="label">NO OF BOXES:</td>
-            <td>{{data1.number_of_boxes}}</td>
-            <td class="label">LR NO.:</td>
-            <td colspan="1">{{data1.booking_id}}</td>
-        </tr>
-        <tr>
-            <td class="label">CONSIGNOR:</td>
-            <td colspan="3">{{data1.consignor.consignor_name}}</td>
-            <td class="label">CONSIGNEE:</td>
-            <td colspan="2">{{data1.consignee.consignee_name}}</td>
-        </tr>
-        <tr>
-            <td class="label">ADDRESS:</td>
-            <td colspan="6">{{data1.consignee.consignee_address}}</td>
-        </tr>
-        <tr>
-            <td class="label">PHONE:</td>
-            <td >{{data1.consignee.consignee_phone}}</td>
-            <td class="label">HUB:</td>
-            <td>{{data1.district.district_name}}</td>
-            <td class="label">WEIGHT:</td>
-            <td >{{data1.weight}}KG</td>
-            <td style="font-size: 20px;font-weight: bold;">{{data1.price}}/-</td>
-        </tr>
-        <tr>
-            <td class="label">REMARK:</td>
-            <td colspan="4" rowspan="2">{{data1.remark}}</td>
-            <td class="label">SEAL & SIGNATURE:</td>
-            <td rowspan="2"></td>
-        </tr>
-        <br>
-    </table>
-
-    <!-- Print Button -->
-
+        <div class="detail-row">
+            <div><strong>Phone:</strong> {{ data1.consignee.consignee_phone }}</div>
+            <div><strong>Hub:</strong> {{ data1.district.district_name }}</div>
+            <div><strong>Weight:</strong> {{ data1.weight }} KG</div>
+            <div><strong>Price:</strong> {{ data1.price }}/-</div>
+        </div>
+        <div class="detail-row">
+            <div><strong>Remark:</strong></div>
+        </div>
+        <div class="detail-row signature-row">
+            <div><strong>Seal & Signature:</strong></div>
+        </div>
+    </div>
 </div>
+
 <div class="row mt-3" style="float:right;">
         <div class="col-12 text-end">
             <button onclick="printTable1();" class="print-btn">

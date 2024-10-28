@@ -3,7 +3,7 @@ from .models import Designation, User, Consignor, Consignee, District, Driver, V
 from django.contrib import messages
 from Staffapp.models import Booking, Despatch, Delivery
 from django.db.models import Q
-
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -464,7 +464,7 @@ def list_booking(request):
         if request.method == 'POST':
             search = request.POST.get('search')
             if search:
-                booking_obj = booking_obj.filter(consignor_name__icontains=search)
+                booking_obj = booking_obj.filter(Q(booking_id__icontains=search))
         return render(request, 'list_booking.html', {'data1': booking_obj, 'data': user_obj})
     else:
         return redirect('/')
@@ -556,3 +556,25 @@ def pod_details(request, booking_id):
         return render(request, 'pod_details.html', {'data1': book_obj, 'data': user_obj})
     else:
         return redirect('/')
+
+
+# def get_booking_details(request):
+#     if request.method == 'GET':
+#         barcode_value = request.GET.get('barcode')
+#         try:
+#             # Assuming you have a field `barcode_value` in your Booking model
+#             booking = Booking.objects.get(barcode_image=barcode_value)
+#             booking_data = {
+#                 'id': booking.booking_id,
+#                 'date_booked': booking.date_booked,
+#                 'consignor': booking.consignor.name,
+#                 'consignee': booking.consignee.name,
+#                 'district': booking.district.name,
+#                 'number_of_boxes': booking.number_of_boxes,
+#                 'weight': booking.weight,
+#                 'price': booking.price,
+#                 'remark': booking.remark,
+#             }
+#             return JsonResponse({'success': True, 'data': booking_data})
+#         except Booking.DoesNotExist:
+#             return JsonResponse({'success': False, 'message': 'Booking not found'})

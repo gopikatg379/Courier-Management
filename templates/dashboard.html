@@ -134,40 +134,80 @@
         .arrow.rotate {
             transform: rotate(180deg);
         }
-        .container-box1 {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 800px;
-        }
-        .header1 {
-            font-size: 24px;
-            color: #E74C3C;
-        }
-        #table1 {
-            width: 100%;
-            border-collapse: collapse;
-            border:1px solid black
-        }
-        #table-row{
-            border: 1px solid #000;
-            padding: 8px;
-            vertical-align: top;
-        }
-        .label {
-            font-weight: bold;
-        }
-        .print-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .print-btn:hover {
-            background-color: #c0392b;
-        }
+        .courier-receipt {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.company-name {
+    font-size: 26px;
+    color: #ff5733;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.barcode-section {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.barcode-image {
+    width: 100px;
+    height: auto;
+}
+
+.tracking-number {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.details-section {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row div {
+    flex: 1;
+    padding-right: 10px;
+}
+
+.signature-row {
+    margin-top: 20px;
+    padding-top: 15px;
+}
+
+.signature-row div {
+    text-align: right;
+    font-size: 16px;
+}
+
+strong {
+    color: #333;
+}
+
+@media (max-width: 500px) {
+    .detail-row {
+        flex-direction: column;
+    }
+}
         footer {
             text-align: center;
             padding: 10px;
@@ -281,9 +321,6 @@
                 {% block content %}
                 {% endblock %}
             </main>
-            {% if messages %}
-                alert('{{ message }}')
-            {% endif %}
         </div>
     </div>
     <footer>
@@ -379,24 +416,49 @@
         printWindow.close();
     }
         function printTable1() {
-        var content = document.getElementById("printableContent").outerHTML;
-        var printWindow = window.open("", "", "height=500, width=800");
-        printWindow.document.write("<html><head><title>Print Table</title>");
-        printWindow.document.write("<style>");
-        printWindow.document.write("body { font-family: Arial, sans-serif; }");
-        printWindow.document.write(".container-box { border: 1px solid #000; padding: 20px; }");
-        printWindow.document.write("table { width: 100%; border-collapse: collapse; }");
-        printWindow.document.write("th, td { padding: 10px; border: 1px solid black; text-align: left; }");
-        printWindow.document.write(".header { font-size: 24px; font-weight: bold; color: #E74C3C; }");
-        printWindow.document.write("</style>");
-        printWindow.document.write("</head><body>");
-        printWindow.document.write(content);
-        printWindow.document.write("</body></html>");
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    }
+    // Get the content to print
+    var content = document.getElementById("printableContent").outerHTML;
+
+    // Open a new window
+    var printWindow = window.open("", "", "height=500, width=800");
+
+    // Write the HTML structure
+    printWindow.document.write("<html><head><title>Print Table</title>");
+    printWindow.document.write("<style>");
+    printWindow.document.write("body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; }");
+    printWindow.document.write(".container-box { border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }");
+    printWindow.document.write(".header { font-size: 24px; font-weight: bold; text-align: center; color: #E74C3C; margin-bottom: 20px; }");
+    printWindow.document.write(".barcode { display: flex; justify-content: center; margin: 10px 0; }");
+    printWindow.document.write(".barcode img { height: 70px; }");
+    printWindow.document.write(".barcode-number { text-align: center; font-size: 16px; }");
+    printWindow.document.write("table { width: 100%; border-collapse: collapse; margin-top: 10px; }");
+    printWindow.document.write("td { padding: 8px 5px; }");
+    printWindow.document.write(".label { font-weight: bold; }");
+    printWindow.document.write(".seal-signature { text-align: right; font-weight: bold; margin-top: 20px; }");
+
+    printWindow.document.write("</style>");
+    printWindow.document.write("</head><body>");
+
+    // Add the content to print
+    printWindow.document.write("<div class='container-box'>");
+    printWindow.document.write(content);
+    printWindow.document.write("</div>");
+
+    printWindow.document.write("</body></html>");
+
+    // Finalize the document
+    printWindow.document.close();
+    printWindow.focus();
+
+    // Print the content
+    printWindow.print();
+
+    // Close the print window
+    printWindow.close();
+}
+
+
+
     </script>
 </body>
 </html>

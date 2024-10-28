@@ -18,6 +18,7 @@ class Booking(models.Model):
     price = models.IntegerField(null=True)
     remark = models.TextField(blank=True, null=True)
     barcode_image = models.ImageField(upload_to='barcodes/', null=True, blank=True)
+
     class Meta:
         db_table = 'booking_table'
 

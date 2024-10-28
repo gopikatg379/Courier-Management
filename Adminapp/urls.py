@@ -39,5 +39,6 @@ urlpatterns = [
     path('despatch_list/<int:despatch_id>',views.despatch_list),
     path('delete_despatch/<int:despatch_id>/',views.delete_despatch),
     path('list_delivery',views.list_delivery),
-    path('pod_details/<int:booking_id>',views.pod_details)
+    path('pod_details/<int:booking_id>',views.pod_details),
+    # path('get_booking_details/', views.get_booking_details)
 ]
