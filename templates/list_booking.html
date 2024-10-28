@@ -21,6 +21,7 @@
         <thead>
         <tr>
             <th>Date</th>
+            <th>LR No.</th>
             <th>Consignor</th>
             <th>Consignee</th>
             <th>Destination</th>
@@ -35,6 +36,7 @@
         {% for x in data1 %}
             <tr>
                 <td>{{x.date_booked|date:"d/m/y"}}</td>
+                <td><a href="/pod_details/{{x.booking_id}}">{{x.booking_id}}</a> </td>
                 <td>{{x.consignor.consignor_name}}</td>
                 <td>{{x.consignee.consignee_name}}</td>
                 <td>{{x.district.district_name}}</td>

@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from Adminapp.models import User, Consignor, Consignee, District, Driver, Vehicle
 from Staffapp.models import Booking, Despatch, Delivery
 from django.contrib import messages
-
+from .barcode_utils import generate_barcode
 
 # Create your views here.
+
+
 def add_booking(request):
     if 'user_id' in request.session:
         user_obj = User.objects.get(user_id=request.session['user_id'])
@@ -34,6 +36,9 @@ def add_booking(request):
             booking_obj.price = request.POST.get('price')
             booking_obj.remark = request.POST.get('remark')
             booking_obj.save()
+            barcode_filename = generate_barcode(str(booking_obj.booking_id))
+            booking_obj.barcode_image = barcode_filename
+            booking_obj.save(update_fields=['barcode_image'])
             messages.success(request, 'Booking added successfully!')
             return redirect('/staff/add_booking')
         con_obj = Consignor.objects.all()
@@ -75,6 +80,7 @@ def edit_booking(request, booking_id):
             booking_obj.price = request.POST.get('price')
             booking_obj.remark = request.POST.get('remark')
             booking_obj.save()
+
             messages.success(request, 'Booking updated successfully!')
             return redirect('/list_booking')
         con_obj = Consignor.objects.all()

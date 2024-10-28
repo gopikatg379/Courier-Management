@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Designation, User, Consignor, Consignee, District, Driver, Vehicle
 from django.contrib import messages
-from Staffapp.models import Booking, Despatch,Delivery
+from Staffapp.models import Booking, Despatch, Delivery
 from django.db.models import Q
+
 
 # Create your views here.
 
@@ -543,6 +544,15 @@ def list_delivery(request):
     if 'user_id' in request.session:
         user_obj = User.objects.get(user_id=request.session['user_id'])
         del_obj = Delivery.objects.filter(Q(status__icontains='Delivered') | Q(status__icontains='Returned'))
-        return render(request, 'list_delivery.html', {'data1': del_obj,'data':user_obj})
+        return render(request, 'list_delivery.html', {'data1': del_obj, 'data': user_obj})
+    else:
+        return redirect('/')
+
+
+def pod_details(request, booking_id):
+    if 'user_id' in request.session:
+        user_obj = User.objects.get(user_id=request.session['user_id'])
+        book_obj = Booking.objects.get(booking_id=booking_id)
+        return render(request, 'pod_details.html', {'data1': book_obj, 'data': user_obj})
     else:
         return redirect('/')
