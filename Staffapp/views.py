@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from Adminapp.models import User, Consignor, Consignee, District, Driver, Vehicle
-from Staffapp.models import Booking, Despatch, Delivery
+from Staffapp.models import Booking, Despatch, Delivery,BoxBarcode
 from django.contrib import messages
-from .barcode_utils import generate_barcode
+from .barcode_utils import generate_main_barcode,generate_box_barcode
 
 # Create your views here.
 
@@ -31,15 +31,22 @@ def add_booking(request):
             except District.DoesNotExist:
                 messages.error(request, 'Invalid district selected')
                 return redirect('/staff/add_booking')
-            booking_obj.number_of_boxes = request.POST.get('number')
+            booking_obj.number_of_boxes = int(request.POST.get('number'))
             booking_obj.weight = request.POST.get('weight')
             booking_obj.price = request.POST.get('price')
             booking_obj.remark = request.POST.get('remark')
             booking_obj.save()
-            barcode_filename = generate_barcode(str(booking_obj.booking_id))
-            print(f'Barcode filename assigned: {barcode_filename}')
-            booking_obj.barcode_image = barcode_filename
+            main_barcode_filename = generate_main_barcode(booking_obj.booking_id)
+            booking_obj.barcode_image = main_barcode_filename
             booking_obj.save(update_fields=['barcode_image'])
+
+            for i in range(1, booking_obj.number_of_boxes + 1):
+                box_barcode_filename = generate_box_barcode(booking_obj.booking_id, i)
+                BoxBarcode.objects.create(
+                    booking=booking_obj,
+                    box_number=i,
+                    barcode_image=box_barcode_filename
+                )
             messages.success(request, 'Booking added successfully!')
             return redirect('/staff/add_booking')
         con_obj = Consignor.objects.all()

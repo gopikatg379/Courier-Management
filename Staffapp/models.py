@@ -44,3 +44,13 @@ class Delivery(models.Model):
 
     class Meta:
         db_table = 'delivery_table'
+
+
+class BoxBarcode(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='box_barcodes')
+    box_number = models.IntegerField()
+    barcode_image = models.ImageField(upload_to='box_barcodes/')
+
+    class Meta:
+        unique_together = ('booking', 'box_number')
+        db_table = 'box_barcode_table'
