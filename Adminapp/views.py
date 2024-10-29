@@ -4,7 +4,7 @@ from django.contrib import messages
 from Staffapp.models import Booking, Despatch, Delivery
 from django.db.models import Q
 from django.http import JsonResponse
-
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def add_designation(request):
@@ -558,23 +558,16 @@ def pod_details(request, booking_id):
         return redirect('/')
 
 
-# def get_booking_details(request):
-#     if request.method == 'GET':
-#         barcode_value = request.GET.get('barcode')
-#         try:
-#             # Assuming you have a field `barcode_value` in your Booking model
-#             booking = Booking.objects.get(barcode_image=barcode_value)
-#             booking_data = {
-#                 'id': booking.booking_id,
-#                 'date_booked': booking.date_booked,
-#                 'consignor': booking.consignor.name,
-#                 'consignee': booking.consignee.name,
-#                 'district': booking.district.name,
-#                 'number_of_boxes': booking.number_of_boxes,
-#                 'weight': booking.weight,
-#                 'price': booking.price,
-#                 'remark': booking.remark,
-#             }
-#             return JsonResponse({'success': True, 'data': booking_data})
-#         except Booking.DoesNotExist:
-#             return JsonResponse({'success': False, 'message': 'Booking not found'})
+# def get_booking_details(request, booking_id):
+#     booking_obj = get_object_or_404(Booking, booking_id=booking_id)
+#     booking_data = {
+#         'date_booked': booking_obj.date_booked,
+#         'consignor': booking_obj.consignor.name,  # Assuming Consignor has a 'name' field
+#         'consignee': booking_obj.consignee.name,  # Assuming Consignee has a 'name' field
+#         'district': booking_obj.district.name,    # Assuming District has a 'name' field
+#         'number_of_boxes': booking_obj.number_of_boxes,
+#         'weight': booking_obj.weight,
+#         'price': booking_obj.price,
+#         'remark': booking_obj.remark,
+#     }
+#     return JsonResponse(booking_data)

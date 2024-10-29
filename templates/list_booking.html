@@ -45,7 +45,7 @@
                 <td>{{x.price}}</td>
                 <td>{{x.status}}</td>
                 <td>
-                    <button class="btn btn-sm btn-warning"><a href=/staff/edit_booking/{{x.booking_id}}><ion-icon name="create-outline"></ion-icon></a></button>
+                    <button class="btn btn-sm btn-warning"><a href="{% url 'staff:edit_booking' x.booking_id %}"><ion-icon name="create-outline"></ion-icon></a></button>
                     {% if data.designation.designation == 'Admin'%}
                         <button class="btn btn-sm btn-danger"><a href=/delete_booking/{{x.booking_id}}><ion-icon name="trash-outline"></ion-icon></a></button>
                     {% endif %}
