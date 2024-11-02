@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Designation, User, Consignor, Consignee, District, Driver, Vehicle
 from django.contrib import messages
-from Staffapp.models import Booking, Despatch, Delivery
+from Staffapp.models import Booking, Despatch, Delivery, BoxBarcode
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+
+
 # Create your views here.
 
 def add_designation(request):
@@ -553,21 +555,8 @@ def pod_details(request, booking_id):
     if 'user_id' in request.session:
         user_obj = User.objects.get(user_id=request.session['user_id'])
         book_obj = Booking.objects.get(booking_id=booking_id)
-        return render(request, 'pod_details.html', {'data1': book_obj, 'data': user_obj})
+        box_obj = BoxBarcode.objects.filter(booking_id=booking_id)
+        print(box_obj)
+        return render(request, 'pod_details.html', {'data2': box_obj, 'data1': book_obj, 'data': user_obj})
     else:
         return redirect('/')
-
-
-# def get_booking_details(request, booking_id):
-#     booking_obj = get_object_or_404(Booking, booking_id=booking_id)
-#     booking_data = {
-#         'date_booked': booking_obj.date_booked,
-#         'consignor': booking_obj.consignor.name,  # Assuming Consignor has a 'name' field
-#         'consignee': booking_obj.consignee.name,  # Assuming Consignee has a 'name' field
-#         'district': booking_obj.district.name,    # Assuming District has a 'name' field
-#         'number_of_boxes': booking_obj.number_of_boxes,
-#         'weight': booking_obj.weight,
-#         'price': booking_obj.price,
-#         'remark': booking_obj.remark,
-#     }
-#     return JsonResponse(booking_data)

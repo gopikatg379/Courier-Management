@@ -13,6 +13,10 @@
             font-family: Arial, sans-serif;
             margin:0;
         }
+        .col-md-3 col-lg-2 sidebar{
+            position: fixed;
+            overflow-y: auto;
+        }
         .dropbtn {
             background-color: #b34c4c;
             color: white;
@@ -219,7 +223,64 @@ strong {
             justify-content: center;
             margin-top: 20px;
         }
+@media print {
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        color: #333;
+        background: #fff;
+    }
 
+    .container-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .company-name {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #E74C3C; /* Custom color for your brand */
+    }
+
+    .barcode-section {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    .barcode-image {
+        height: 70px; /* Ensure barcode fits well */
+    }
+
+    .details-section {
+        margin-top: 20px;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+        padding: 5px 0;
+    }
+
+    .seal-signature {
+        text-align: right;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    button.print-btn {
+        display: none; /* Hide the print button on print */
+    }
+}
     </style>
 </head>
 <body>
@@ -244,7 +305,7 @@ strong {
             </div>
         </div>
         <div class="row">
-            <nav class="col-md-3 col-lg-2 sidebar">
+            <nav class="col-md-3 col-lg-2 sidebar" >
                 <h6 style="font-style: italic;">Main Navigation</h6><br>
                 <h5><a href="/dashboard"><ion-icon name="cube-outline"></ion-icon> Dashboard</a></h5>
                 <h5><a data-toggle="collapse" href="#masterMenu" role="button" aria-expanded="false" aria-controls="masterMenu" ><ion-icon name="chevron-up-outline" class="arrow" id="consignorArrow"></ion-icon>
@@ -416,47 +477,40 @@ strong {
         printWindow.close();
     }
         function printTable1() {
-    // Get the content to print
-    var content = document.getElementById("printableContent").outerHTML;
+    var receipts = document.querySelectorAll('.courier-receipt');
+    var content = '';
 
-    // Open a new window
+    receipts.forEach(function(receipt) {
+        content += receipt.outerHTML;
+    });
+
     var printWindow = window.open("", "", "height=500, width=800");
 
-    // Write the HTML structure
-    printWindow.document.write("<html><head><title>Print Table</title>");
+    printWindow.document.write("<html><head><title>Print Receipts</title>");
     printWindow.document.write("<style>");
-    printWindow.document.write("body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; }");
+    printWindow.document.write("body { margin: 0; padding: 20px; font-family: Arial, sans-serif; color: #333; background: #fff; }");
     printWindow.document.write(".container-box { border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }");
-    printWindow.document.write(".header { font-size: 24px; font-weight: bold; text-align: center; color: #E74C3C; margin-bottom: 20px; }");
-    printWindow.document.write(".barcode { display: flex; justify-content: center; margin: 10px 0; }");
-    printWindow.document.write(".barcode img { height: 70px; }");
-    printWindow.document.write(".barcode-number { text-align: center; font-size: 16px; }");
-    printWindow.document.write("table { width: 100%; border-collapse: collapse; margin-top: 10px; }");
-    printWindow.document.write("td { padding: 8px 5px; }");
-    printWindow.document.write(".label { font-weight: bold; }");
+    printWindow.document.write(".company-name { font-size: 28px; font-weight: bold; text-align: center; color: #E74C3C; margin-bottom: 20px; }");
+    printWindow.document.write(".barcode-section { display: flex; justify-content: center; margin: 10px 0; }");
+    printWindow.document.write(".barcode-image { height: 70px; }");
+    printWindow.document.write(".details-section { margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px; }");
+    printWindow.document.write(".detail-row { display: flex; justify-content: space-between; margin: 5px 0; padding: 5px 0; }");
     printWindow.document.write(".seal-signature { text-align: right; font-weight: bold; margin-top: 20px; }");
-
+    printWindow.document.write("button.print-btn { display: none; }"); // Hide print button
+    printWindow.document.write("@media print { button { display: none; } }"); // Add media query for print
     printWindow.document.write("</style>");
     printWindow.document.write("</head><body>");
 
-    // Add the content to print
     printWindow.document.write("<div class='container-box'>");
     printWindow.document.write(content);
     printWindow.document.write("</div>");
 
     printWindow.document.write("</body></html>");
-
-    // Finalize the document
     printWindow.document.close();
     printWindow.focus();
-
-    // Print the content
     printWindow.print();
-
-    // Close the print window
     printWindow.close();
 }
-
 
 
     </script>
