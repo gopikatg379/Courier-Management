@@ -39,4 +39,19 @@
             </div>
         <button class="btn btn-primary" style="background-color: #dc3545;float:right;margin-top:50px;" onclick="printTable()">Print&nbsp;<ion-icon name="print-outline"></ion-icon></button>
     </div>
+<div class="pagination">
+    <span class="step-links">
+        {% if data1.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ data1.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ data1.number }} of {{ data1.paginator.num_pages }}</span>
+
+        {% if data1.has_next %}
+            <a href="?page={{ data1.next_page_number }}">Next</a>
+            <a href="?page={{ data1.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

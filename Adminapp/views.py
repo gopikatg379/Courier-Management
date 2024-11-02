@@ -3,8 +3,7 @@ from .models import Designation, User, Consignor, Consignee, District, Driver, V
 from django.contrib import messages
 from Staffapp.models import Booking, Despatch, Delivery, BoxBarcode
 from django.db.models import Q
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # Create your views here.
@@ -463,13 +462,28 @@ def list_booking(request):
     if 'user_id' in request.session:
         user_obj = User.objects.get(user_id=request.session['user_id'])
         booking_obj = Booking.objects.all()
+
+        # Search functionality
         if request.method == 'POST':
             search = request.POST.get('search')
             if search:
                 booking_obj = booking_obj.filter(Q(booking_id__icontains=search))
-        return render(request, 'list_booking.html', {'data1': booking_obj, 'data': user_obj})
+
+        # Pagination setup
+        paginator = Paginator(booking_obj, 10)  # Show 10 bookings per page
+        page_number = request.GET.get('page')
+
+        try:
+            page_obj = paginator.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.get_page(1)
+        except EmptyPage:
+            page_obj = paginator.get_page(paginator.num_pages)
+
+        return render(request, 'list_booking.html', {'data1': page_obj, 'data': user_obj})
     else:
         return redirect('/')
+
 
 
 def delete_booking(request, booking_id):
@@ -486,11 +500,25 @@ def list_despatch(request):
     if 'user_id' in request.session:
         user_obj = User.objects.get(user_id=request.session['user_id'])
         despatch_obj = Despatch.objects.all()
+
+        # Search functionality
         if request.method == 'POST':
             search = request.POST.get('search')
             if search:
                 despatch_obj = despatch_obj.filter(despatch_number__icontains=search)
-        return render(request, 'list_despatch.html', {'data1': despatch_obj, 'data': user_obj})
+
+        # Pagination setup
+        paginator = Paginator(despatch_obj, 10)  # Show 10 despatch items per page
+        page_number = request.GET.get('page')
+
+        try:
+            page_obj = paginator.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.get_page(1)
+        except EmptyPage:
+            page_obj = paginator.get_page(paginator.num_pages)
+
+        return render(request, 'list_despatch.html', {'data1': page_obj, 'data': user_obj})
     else:
         return redirect('/')
 
@@ -502,17 +530,14 @@ def despatch_list(request, despatch_id):
             # Fetch the despatch object and related bookings
             despatch_obj = Despatch.objects.prefetch_related('booking__consignor', 'booking__consignee').get(
                 despatch_id=despatch_id)
-            print(despatch_obj)
         except Despatch.DoesNotExist:
             despatch_obj = None
-        bookings = despatch_obj.booking.all()
-        print(bookings)
+            bookings = []
+        else:
+            bookings = despatch_obj.booking.all()
 
         booking_data = []
         if despatch_obj:
-            # Access the related bookings through the ManyToManyField
-            bookings = despatch_obj.booking.all()
-
             for booking in bookings:
                 booking_data.append({
                     'booking_id': booking.booking_id,
@@ -522,12 +547,25 @@ def despatch_list(request, despatch_id):
                     'price': booking.price,
                     'number_of_boxes': booking.number_of_boxes
                 })
-        print(booking_data)
+
+        # Pagination setup
+        paginator = Paginator(booking_data, 10)  # Show 10 bookings per page
+        page_number = request.GET.get('page')
+
+        try:
+            page_obj = paginator.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.get_page(1)
+        except EmptyPage:
+            page_obj = paginator.get_page(paginator.num_pages)
+
+        # Handle search functionality
         if request.method == 'POST':
             search = request.POST.get('search')
             if search:
-                despatch_obj = despatch_obj.filter(booking_id__icontains=search)
-        return render(request, 'despatch_list.html', {'data1': booking_data, 'data': user_obj, 'data2': despatch_obj})
+                page_obj = [booking for booking in booking_data if search in booking['booking_id']]
+
+        return render(request, 'despatch_list.html', {'data1': page_obj, 'data': user_obj, 'data2': despatch_obj})
     else:
         return redirect('/')
 

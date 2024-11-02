@@ -382,6 +382,7 @@ strong {
                 {% block content %}
                 {% endblock %}
             </main>
+
         </div>
     </div>
     <footer>
@@ -454,15 +455,15 @@ strong {
             }
         }
 
-    $(document).ready(function() {
-        $('#despatchTable,#bookingTable,#deliveryTable,#receiptTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "pageLength": 6,
-        });
-    });
+<!--    $(document).ready(function() {-->
+<!--        $('#despatchTable,#bookingTable,#deliveryTable,#receiptTable').DataTable({-->
+<!--            "paging": true,-->
+<!--            "searching": true,-->
+<!--            "ordering": true,-->
+<!--            "info": true,-->
+<!--            "pageLength": 6,-->
+<!--        });-->
+<!--    });-->
     function printTable() {
         var tableContent = document.getElementById("printableTable").outerHTML;
         var printWindow = window.open("", "", "height=500, width=800");
